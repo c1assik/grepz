@@ -1,0 +1,34 @@
+#!/bin/bash
+source $HOME/.local/bin/bash_animation/bash_loading_animations.sh
+trap BLA::stop_loading_animation SIGINT
+
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $(basename "$0") <pattern> <tarfile>"
+    exit 1
+fi
+
+LOG_DIR=$HOME/.grepz
+LOG_FILE=${LOG_DIR}/log_$2.txt
+
+[ -d "$LOG_DIR" ] || mkdir "$LOG_DIR"
+
+
+main() {
+    tar tf "$2" | while read -r FILE
+        do
+            if tar xf "$2" $FILE  -O | grep -i "$1" ;then
+                echo "found pattern in : $FILE"
+            fi
+        done
+}
+
+echo "Oh, fuck! Digging into this shit again ..."
+BLA::start_loading_animation "${BLA_sick[@]}"
+main $1 $2  &> "${LOG_FILE}"
+BLA::stop_loading_animation
+
+if [ -f "${LOG_FILE}" ]; then 
+    cat "${LOG_FILE}"
+    echo "The search results are saved in ${LOG_FILE}/"
+fi
