@@ -1,5 +1,5 @@
 #!/bin/bash
-source $HOME/.local/bin/bash_animation/bash_loading_animations.sh
+source $HOME/.local/bin/grepz/bash_animation/bash_loading_animations.sh
 trap BLA::stop_loading_animation SIGINT
 
 
